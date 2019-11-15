@@ -6,7 +6,7 @@ import time
 import threading
 import requests
 
-TOKEN = "NTc4MTM2Mjc2OTE0NTM2NDU4.XNvPgQ.8Prc-jk79aoTQ5iGwDzmy5G21Gw"
+TOKEN = "NTc4MTM2Mjc2OTE0NTM2NDU4.Xc6PZA.EzE0nYkuxngDDU79If2er7m2wx4"
 client = discord.Client()
 
 
@@ -52,10 +52,9 @@ async def on_message(message):
         await say_random_message(message)
 
     if "/add_rand " in message.content:
-        await add_random_message(message,add_message.lstrip("/add_rand "))
+        await add_random_message(message,message.content.lstrip("/add_rand "))
 
     if "ダイス" in message.content:
         await message.channel.send(str(random.randint(0,5)+1))
-
 
 client.run(TOKEN)
