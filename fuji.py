@@ -6,7 +6,7 @@ import time
 import threading
 import requests
 
-TOKEN = "NTc4MTM2Mjc2OTE0NTM2NDU4.Xc6PZA.EzE0nYkuxngDDU79If2er7m2wx4"
+
 client = discord.Client()
 
 
@@ -28,11 +28,11 @@ async def say_random_message(message):#ランダムでメッセージを返す�
     f = open("./random_text.txt",encoding="utf-8_sig")
     message_list = f.readlines()
     f.close()
-    await message.channel.send(massage_list[random.randint(0,len(message_list)-1)])
+    await message.channel.send(message_list[random.randint(0,len(message_list)-1)])
 
 async def add_random_message(message,add_message):#ランダムメッセージを追加するよ
     f = open("./random_text.txt","a",encoding="utf-8_sig")
-    f.write(add_message)
+    f.write("\n"+add_message)
     f.close()
     await message.channel.send(add_message+" OK!")
 
@@ -44,6 +44,8 @@ async def on_ready():
 # メッセージ受信時に動作する処理
 @client.event
 async def on_message(message):
+     if message.author.bot:#メッセージがbotなら無視するよ！
+        return
     if  '明日の天気' in message.content:
         await weather_tomorrow(message)
     if "明後日の天気" in message.content:
@@ -57,4 +59,5 @@ async def on_message(message):
     if "ダイス" in message.content:
         await message.channel.send(str(random.randint(0,5)+1))
 
+TOKEN = input()
 client.run(TOKEN)
