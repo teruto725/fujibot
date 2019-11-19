@@ -44,7 +44,7 @@ async def on_ready():
 # メッセージ受信時に動作する処理
 @client.event
 async def on_message(message):
-     if message.author.bot:#メッセージがbotなら無視するよ！
+    if message.author.bot:#メッセージがbotなら無視するよ！
         return
     if  '明日の天気' in message.content:
         await weather_tomorrow(message)
