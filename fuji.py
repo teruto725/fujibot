@@ -47,17 +47,17 @@ async def del_random_message(message,i):#ランダムメッセージ消すよ
     f = open("./random_text.txt",encoding="utf-8_sig")
     message_list = f.readlines()
     f.close()
-    try :
+    if i >= len(message_list) or i < 0:
+        await message.channel.send("配列外参照なんですが...")
+    else:
         del message_list[i]
         f = open("./random_text.txt","w",encoding="utf-8_sig")
         messages = ""
-        for message in message_list:
-            messages += message
+        for messagerand in message_list:
+            messages += messagerand
         f.write(messages)
         f.close()
         await message.channel.send("delete completed")
-    except IndexError:
-        await message.channel.send("配列外参照なんですが...")
 
 # 起動時に動作する処理
 @client.event
@@ -69,7 +69,8 @@ async def on_ready():
 async def on_message(message):
     if message.author.bot:#メッセージがbotなら無視するよ！
         return
-
+    if "/info fuji" in message.content:
+        await message.channel.send("https://github.com/teruto725/fujibot")
     if  '明日の天気' in message.content:
         await weather_tomorrow(message)
     if "明後日の天気" in message.content:
