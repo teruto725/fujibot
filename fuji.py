@@ -6,7 +6,7 @@ import time
 import threading
 import requests
 
-TOKEN = "NTc4MTM2Mjc2OTE0NTM2NDU4.XdO8dQ.AeMXO39WqPw1v5zdG1JzGyAopXk"
+
 TOKEN = input()
 client = discord.Client()
 
@@ -55,9 +55,9 @@ async def del_random_message(message,i):#ランダムメッセージ消すよ
             messages += message
         f.write(messages)
         f.close()
-        message.channel.send("delete completed")
+        await message.channel.send("delete completed")
     except IndexError:
-        message.channel.send("配列外参照なんですが...")
+        await message.channel.send("配列外参照なんですが...")
 
 # 起動時に動作する処理
 @client.event
@@ -88,6 +88,7 @@ async def on_message(message):
         await message.channel.send(str(random.randint(0,5)+1))
 
     if "/kill" == message.content:#シャットダウン
+        await message.channel.send("ぐえ")
         await client.logout()
         await sys.exit()
 
