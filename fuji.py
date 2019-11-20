@@ -7,8 +7,8 @@ import threading
 import requests
 
 
+TOKEN = input()
 client = discord.Client()
-
 
 async def weather_tomorrow(message):#明日の天気を返すよ！
     url = "http://weather.livedoor.com/forecast/webservice/json/v1"
@@ -36,6 +36,29 @@ async def add_random_message(message,add_message):#ランダムメッセージ�
     f.close()
     await message.channel.send(add_message+" OK!")
 
+async def index_random_message(message):#ランダムメッセージ一覧みるよ
+    f = open("./random_text.txt",encoding="utf-8_sig")
+    message_list = f.readlines()
+    f.close()
+    for i in range(len(message_list)):
+        await message.channel.send(str(i)+":"+message_list[i])
+
+async def del_random_message(message,i):#ランダムメッセージ消すよ
+    f = open("./random_text.txt",encoding="utf-8_sig")
+    message_list = f.readlines()
+    f.close()
+    try :
+        del message_list[i]
+        f = open("./random_text.txt","w",encoding="utf-8_sig")
+        messages = ""
+        for message in message_list:
+            messages += message
+        f.write(messages)
+        f.close()
+        await message.channel.send("delete completed")
+    except IndexError:
+        await message.channel.send("配列外参照なんですが...")
+
 # 起動時に動作する処理
 @client.event
 async def on_ready():
@@ -46,18 +69,27 @@ async def on_ready():
 async def on_message(message):
     if message.author.bot:#メッセージがbotなら無視するよ！
         return
+
     if  '明日の天気' in message.content:
         await weather_tomorrow(message)
     if "明後日の天気" in message.content:
         await weahter_nexttomorrow(message)
+
     if  '藤' in message.content or "剣道" in message.content:
         await say_random_message(message)
-
     if "/add_rand " in message.content:
         await add_random_message(message,message.content.lstrip("/add_rand "))
+    if "/index_rand" == message.content:
+        await index_random_message(message)
+    if "/del_rand " in message.content:
+        await del_random_message(message,int(message.content.lstrip("/del_rand ")))
 
     if "ダイス" in message.content:
         await message.channel.send(str(random.randint(0,5)+1))
 
-TOKEN = input()
+    if "/kill" == message.content:#シャットダウン
+        await message.channel.send("ぐえ")
+        await client.logout()
+        await sys.exit()
+
 client.run(TOKEN)
